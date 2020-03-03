@@ -1,3 +1,5 @@
+import { getCreatorNodeWhitelist } from './getEnv';
+
 const axios = require("axios");
 
 const CancelToken = axios.CancelToken;
@@ -8,15 +10,10 @@ const publicGateways = [
   "https://cloudflare-ipfs.com/ipfs/"
 ];
 
-// TODO: put this as an envar
-const CREATOR_NODE_GATEWAY_WHITELIST = new Set([
-  "https://usermetadata.audius.co",
-  "https://creatornode.audius.co",
-  "https://creatornode2.audius.co",
-  "https://creatornode3.audius.co"
-]);
+const creatorNodes = getCreatorNodeWhitelist()
+const creatorNodeWhitelist = new Set(creatorNodes.split(','))
 
-// These two are from identity services
+// Stolen from libs :)
 
 const wait = async milliseconds => {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
@@ -83,7 +80,7 @@ async function raceRequests(urls, callback) {
 }
 
 export const fetchCID = async (cid, creatorNodeGateways = [], cache = true) => {
-  let allGateways = CREATOR_NODE_GATEWAY_WHITELIST;
+  let allGateways = creatorNodeWhitelist;
 
   try {
     const image = await _fetchCID(cid, allGateways);

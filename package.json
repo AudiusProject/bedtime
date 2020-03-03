@@ -1,99 +1,42 @@
 {
   "private": true,
-  "name": "audius-bedtime",
-  "version": "0.0.1",
+  "name": "AudiusBedtime",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start:production": "env-cmd -f .env.prodocution npm run -s serve",
-    "start:staging": "env-cmd -f .env.staging npm run -s dev",
-    "start:development": "env-cmd -f .env.development npm run -s dev",
-    "build": "preact build --no-prerender",
-    "serve": "preact build --no-prerender && preact serve",
-    "dev": "preact watch",
-    "lint": "tslint --project src",
-    "test": "jest ./tests",
-    "precommit": "lint-staged"
-  },
-  "lint-staged": {
-    "*.{js,jsx,css,md,scss}": [
-      "prettier --write",
-      "git add"
-    ],
-    "*.{ts,tsx}": [
-      "tslint --fix",
-      "git add"
-    ]
-  },
-  "eslintConfig": {
-    "extends": "eslint-config-aerian"
+    "start": "env-cmd -f .env env-cmd -f .env.local npm run -s dev",
+    "start:development": "env-cmd -f .env env-cmd -f .env.development env-cmd -f .env.local npm run -s dev",
+    "build": "env-cmd -f .env preact build --no-prerender --no-sw --template src/template.html",
+    "serve": "preact build --no-prerender --no-sw --template src/template.html && preact serve",
+    "dev": "preact watch --no-sw --template src/template.html",
+    "deploy": "aws s3 sync build s3://bedtime.audius.co --delete && aws s3 cp s3://bedtime.audius.co/index.html s3://bedtime.audius.co/index.html  --cache-control max-age=0,no-cache,no-store,must-revalidate --content-type text/html --metadata-directive REPLACE --acl public-read && aws cloudfront create-invalidation --distribution-id E33HWSH5ZFFGR1 --paths \"/*\"",
+    "lint": "eslint src"
   },
   "eslintIgnore": [
     "build/*"
   ],
   "devDependencies": {
-    "@types/jest": "^23.3.10",
-    "@types/webpack-env": "^1.13.9",
-    "css-loader": "^1.0.1",
-    "husky": "^1.2.0",
+    "env-cmd": "^10.1.0",
+    "eslint": "^6.0.1",
+    "eslint-config-synacor": "^3.0.4",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^23.6.0",
-    "lint-staged": "^8.1.0",
-    "preact-cli": "^3.0.0-next.19",
+    "per-env": "^1.0.2",
+    "preact-cli": "3.0.0-rc.7",
     "preact-cli-plugin-env-vars": "^1.2.1",
-    "preact-render-spy": "^1.3.0",
-    "prettier": "^1.15.3",
-    "ts-jest": "^23.10.5",
-    "ts-loader": "^3.5.0",
-    "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.17.0",
-    "tslint-consistent-codestyle": "^1.14.1",
-    "tslint-eslint-rules": "^5.4.0",
-    "tslint-react": "^3.6.0",
-    "typescript": "^3.7.2",
-    "typings-for-css-modules-loader": "^1.7.0"
+    "preact-cli-svg-loader": "^1.0.0",
+    "preact-render-spy": "^1.2.1",
+    "serve": "^11.1.0"
   },
   "dependencies": {
+    "@audius/stems": "^0.1.5",
     "axios": "^0.19.2",
-    "env-cmd": "^10.0.1",
+    "classnames": "^2.2.6",
+    "copy-to-clipboard": "^3.2.1",
     "hls.js": "^0.13.1",
-    "preact": "^10.0.0",
-    "preact-render-to-string": "^5.0.6"
-  },
-  "peerDependencies": {
-    "prettier": ">1.0.0",
-    "tslint": ">5.0.0"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "verbose": true,
-    "setupFiles": [
-      "<rootDir>/src/tests/__mocks__/browserMocks.js"
-    ],
-    "testURL": "http://localhost:8080",
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "ts",
-      "tsx"
-    ],
-    "moduleDirectories": [
-      "node_modules"
-    ],
-    "testMatch": [
-      "**/__tests__/**/*.[jt]s?(x)",
-      "**/?(*.)(spec|test).[jt]s?(x)"
-    ],
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/tests/__mocks__/fileMock.js",
-      "\\.(css|less|scss)$": "identity-obj-proxy",
-      "^./style$": "identity-obj-proxy",
-      "^preact$": "<rootDir>/node_modules/preact/dist/preact.min.js",
-      "^react$": "preact-compat",
-      "^react-dom$": "preact-compat",
-      "^create-react-class$": "preact-compat/lib/create-react-class",
-      "^react-addons-css-transition-group$": "preact-css-transition-group"
-    }
+    "preact": "^10.0.1",
+    "preact-render-to-string": "^5.1.0",
+    "preact-router": "^3.0.0",
+    "react-transition-group": "^4.3.0",
+    "simplebar-react": "^2.1.0"
   }
 }

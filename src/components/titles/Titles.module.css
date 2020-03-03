@@ -1,0 +1,42 @@
+.titles {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 18px;
+}
+
+.title:hover {
+  text-decoration: underline;
+}
+
+.artistName {
+  font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.artistName:hover {
+  text-decoration: underline;
+}
+
+.artistName svg {
+  width: 14px;
+  height: 14px;
+  margin-left: 8px;
+  position: relative;
+  top: -1px;
+}
+
+.artistName path {
+  fill: #ffffff;
+}
