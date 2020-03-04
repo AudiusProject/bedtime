@@ -9,7 +9,7 @@ import TrackPlayerCard from './TrackPlayerCard'
 import { useSpacebar } from '../../hooks/useSpacebar'
 import { useRecordListens } from '../../hooks/useRecordListens'
 import { PlayingState } from '../playbutton/PlayButton'
-import { isMobile } from '../../util/isMobile.js'
+import { isMobile } from '../../util/isMobile'
 
 const LISTEN_INTERVAL_SECONDS = 1
 
