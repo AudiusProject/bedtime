@@ -14,6 +14,8 @@ import styles from './PausePopover.module.css'
 import pauseTransitions from './PauseTransitions.module.css'
 import { CardDimensionsContext } from '../card/Card'
 
+const DISMISS_BUTTON_CARD_LEFT_MARGIN = 12
+
 const PausedPopoverCard = ({
   artworkURL,
   artworkClickURL,
@@ -28,7 +30,7 @@ const PausedPopoverCard = ({
   const getDismissButtonStyle = () => {
     if (flavor === PlayerFlavor.COMPACT) return {}
     const bodyWidth = window.document.body.clientWidth
-    const leftInset = (bodyWidth - width) / 2 + 12
+    const leftInset = (bodyWidth - width) / 2 + DISMISS_BUTTON_CARD_LEFT_MARGIN
     return {
       left: `${leftInset}px`
     }
