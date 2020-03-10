@@ -21,14 +21,15 @@ const PausedPopoverCard = ({
   artworkClickURL,
   listenOnAudiusURL,
   flavor,
-  isMobileWebTwitter
+  isMobileWebTwitter,
+  isTwitter
 }) => {
   const { popoverVisibility, setPopoverVisibility } = useContext(PauseContext)
   const { width } = useContext(CardDimensionsContext)
 
   // Get the proper offset for the dismiss button in case we're in card mode
   const getDismissButtonStyle = () => {
-    if (flavor === PlayerFlavor.COMPACT) return {}
+    if (flavor === PlayerFlavor.COMPACT || isTwitter) return {}
     const bodyWidth = window.document.body.clientWidth
     const leftInset = (bodyWidth - width) / 2 + DISMISS_BUTTON_CARD_LEFT_MARGIN
     return {

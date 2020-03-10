@@ -271,6 +271,7 @@ const App = () => {
              listenOnAudiusURL={listenOnAudiusURL}
              flavor={flavor}
              isMobileWebTwitter={mobileWebTwitter}
+             isTwitter={requestState?.isTwitter}
             />)
   }
 
