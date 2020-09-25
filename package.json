@@ -6,7 +6,8 @@
   "scripts": {
     "start": "env-cmd -f .env env-cmd -f .env.local npm run -s dev",
     "start:development": "env-cmd -f .env env-cmd -f .env.development env-cmd -f .env.local npm run -s dev",
-    "build": "env-cmd -f .env preact build --no-prerender --no-sw --template src/template.html",
+    "build": "env-cmd -f .env preact build --no-prerender --no-sw --template src/template.html && npm run build-api",
+    "build-api": "coffee --no-header -o src/api -c src/api && webpack --config src/api/webpack.config.js -o build/api.js",
     "serve": "preact build --no-prerender --no-sw --template src/template.html && preact serve",
     "dev": "preact watch --no-sw --template src/template.html",
     "deploy": "aws s3 sync build s3://bedtime.audius.co --delete && aws s3 cp s3://bedtime.audius.co/index.html s3://bedtime.audius.co/index.html  --cache-control max-age=0,no-cache,no-store,must-revalidate --content-type text/html --metadata-directive REPLACE --acl public-read && aws cloudfront create-invalidation --distribution-id E33HWSH5ZFFGR1 --paths \"/*\"",
@@ -16,6 +17,8 @@
     "build/*"
   ],
   "devDependencies": {
+    "coffee-loader": "^1.0.0",
+    "coffeescript": "^2.5.1",
     "env-cmd": "^10.1.0",
     "eslint": "^6.0.1",
     "eslint-config-synacor": "^3.0.4",
@@ -25,7 +28,8 @@
     "preact-cli-plugin-env-vars": "^1.2.1",
     "preact-cli-svg-loader": "^1.0.0",
     "preact-render-spy": "^1.2.1",
-    "serve": "^11.1.0"
+    "serve": "^11.1.0",
+    "webpack-cli": "^3.3.12"
   },
   "dependencies": {
     "@audius/stems": "^0.1.5",
