@@ -65,7 +65,7 @@ export const getAPIHostname = () => {
       return PROD_GA_HOSTNAME
     case Environment.STAGING:
     case Environment.DEVELOPMENT:
-      return STAGING_GA_HOSTNAME
+      return PROD_GA_HOSTNAME
     default:
       // There shouldn't be a case where we hit default,
       // but err on the side of caution and use prod

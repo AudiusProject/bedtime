@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'preact/hooks'
 import AudioStream from '../audio/AudioStream'
 import { PlayingState } from '../components/playbutton/PlayButton'
 import { recordPlay, recordPause } from '../analytics/analytics'
-import { iframeHostname } from '../util/iframeHostname'
+import { sendPostMessage } from '../api/util'
 
 const SEEK_INTERVAL = 200
 
@@ -41,6 +41,7 @@ const usePlayback = (id, onAfterAudioEnd) => {
   const togglePlayRef = useRef(() => {})
   const loadRef = useRef((trackSegments) => {})
   const stopRef = useRef(() => {})
+  const setVolumeRef = useRef(() => {})
 
   // On track end, we need to be able to refer to the
   // latest updated onAfterAudioEnd function passed in
@@ -51,9 +52,10 @@ const usePlayback = (id, onAfterAudioEnd) => {
     onAfterAudioEndRef.current({
       stop: stopRef.current,
       onTogglePlay: togglePlayRef.current,
-      load: loadRef.current
+      load: loadRef.current,
+      setVolume: setVolumeRef.current
     })
-    window.parent.postMessage(JSON.stringify({ from: 'audiusembed', event: 'TRACK_ENDED' }), iframeHostname(document.referrer))
+    sendPostMessage({ event: 'finish' })
   }
 
   // Update the ref when a new callback function is provided.
@@ -73,8 +75,10 @@ const usePlayback = (id, onAfterAudioEnd) => {
   const loadTrack = useCallback((trackSegments) => {
     if (!audioRef.current) { throw new Error('Init not called') }
     audioRef.current.load(trackSegments, onAudioEnd)
-    setTiming({ position: 0, duration: audioRef.current.getDuration() })
-    window.parent.postMessage(JSON.stringify({ from: 'audiusembed', event: 'LOADED' }), iframeHostname(document.referrer))
+    const newTiming = { position: 0, duration: audioRef.current.getDuration() }
+    setTiming(newTiming)
+    sendPostMessage({ event: 'ready' })
+    sendPostMessage({ event: 'progress', data: newTiming })
   }, [audioRef, setTiming])
   loadRef.current = loadTrack
 
@@ -86,7 +90,11 @@ const usePlayback = (id, onAfterAudioEnd) => {
       if (!audio) { return }
       const position = audio.getPosition()
       const duration = audio.getDuration()
-      setTiming({ position, duration })
+      const newTiming = { position, duration }
+      setTiming(newTiming)
+      if(playingStateRef.current == PlayingState.Playing){
+        sendPostMessage({ event: 'progress', data: newTiming })
+      }
       // Handle buffering state
       const isBuffering = audio.isBuffering()
       if (isBuffering && playingStateRef.current !== PlayingState.Buffering) {
@@ -120,7 +128,7 @@ const usePlayback = (id, onAfterAudioEnd) => {
     const audio = audioRef.current
     if (!audio) { return }
     audio.seek(location)
-    window.parent.postMessage(JSON.stringify({ from: 'audiusembed', event: 'SEEK' }), iframeHostname(document.referrer))
+    sendPostMessage({ event: 'seek' })
   }, [])
 
   const onTogglePlay = useCallback((idOverride) => {
@@ -130,7 +138,7 @@ const usePlayback = (id, onAfterAudioEnd) => {
         audioRef.current?.play()
         setPlayCounter(p => p + 1)
         recordPlay(idOverride || id)
-        window.parent.postMessage(JSON.stringify({ from: 'audiusembed', event: 'PLAY' }), iframeHostname(document.referrer))
+        sendPostMessage({ event: 'play' })
         break
       case PlayingState.Buffering:
         break
@@ -138,13 +146,13 @@ const usePlayback = (id, onAfterAudioEnd) => {
         setPlayingStateRef(PlayingState.Playing)
         audioRef.current?.play()
         recordPlay(idOverride || id)
-        window.parent.postMessage(JSON.stringify({ from: 'audiusembed', event: 'PLAY' }), iframeHostname(document.referrer))
+        sendPostMessage({ event: 'play' })
         break
       case PlayingState.Playing:
         setPlayingStateRef(PlayingState.Paused)
         audioRef.current?.pause()
         recordPause(idOverride || id)
-        window.parent.postMessage(JSON.stringify({ from: 'audiusembed', event: 'PAUSE' }), iframeHostname(document.referrer))
+        sendPostMessage({ event: 'pause' })
         break
     }
   }, [playingStateRef, setPlayingStateRef, id])
@@ -159,6 +167,12 @@ const usePlayback = (id, onAfterAudioEnd) => {
 
   stopRef.current = stop
 
+  const setVolume = useCallback((volume) => {
+    audioRef.current?.setVolume(volume)
+  }, [audioRef])
+
+  setVolumeRef.current = setVolume
+
   return {
     initAudio,
     playingState: playingStateRef.current,
@@ -169,6 +183,7 @@ const usePlayback = (id, onAfterAudioEnd) => {
     seekTo,
     onTogglePlay,
     stop,
+    setVolume
   }
 
 }
