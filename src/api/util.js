@@ -3,6 +3,6 @@ export const sendPostMessage = (data) => {
   if(window.parent !== window){
     let message = data
     message.from = 'audiusembed'
-    window.parent.postMessage(data, '*')
+    window.parent.postMessage(JSON.stringify(message), '*')
   }
 }
