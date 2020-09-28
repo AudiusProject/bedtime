@@ -76,10 +76,9 @@ const TrackPlayerContainer = ({
             if(method === 'togglePlay') didTogglePlay()
             if(method === 'stop') stop()
             if(method === 'seekTo') seekTo(value)
-            if(method === 'getPosition') return position
           }
         } catch (error) {
-  
+          console.log(error)
         }
       }
     }
