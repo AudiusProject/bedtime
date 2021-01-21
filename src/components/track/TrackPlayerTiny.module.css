@@ -1,0 +1,97 @@
+.container {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  height: 20px !important;
+  border: 1px solid #F7F7F9;
+  box-sizing: border-box;
+  border-radius: 36px;
+  max-height: 20px;
+  width: 100%;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+}
+
+.playContainer {
+  position: absolute;
+  left: 0;
+  background: linear-gradient(90deg, #FFFFFF 73.44%, rgba(255, 255, 255, 0) 100%);
+  min-width: 26px;
+  height: 20px;
+  display: flex;
+  z-index: 1;
+  align-items: center;
+}
+
+.playButton {
+  margin-left: 2px;
+  height: 16px;
+  width: 16px;
+}
+
+.playButton path {
+  fill: var(--primary) !important;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+.infoContainer {
+  height: 20px;
+}
+
+.info {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 11px;
+  line-height: 20px;
+  vertical-align: bottom;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.01em;
+  color: var(--neutral);
+  white-space: nowrap;
+  margin-left: 26px;
+
+  display: inline-block;
+  width: var(--info-width);
+}
+
+/** define animation as a separate class so that it resets when removing */
+.info.animating {
+  animation-play-state: running;
+  text-shadow: var(--info-width) 0 var(--neutral), 
+                calc(var(--info-width) * 2) 0 var(--neutral), 
+                calc(var(--info-width) * 3) 0 var(--neutral),
+                calc(var(--info-width) * 4) 0 var(--neutral);
+  
+  will-change: transform;
+  animation: marquee 15s linear infinite;
+  animation-delay: 3s;
+}
+
+.logoContainer {
+  position: absolute;
+  right: 0;
+  background: linear-gradient(270deg, #FFFFFF 73.44%, rgba(255, 255, 255, 0) 100%);
+  min-width: 22px;
+  height: 20px;
+  display: flex;
+  z-index: 1;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.logo {
+  height: 10px;
+  width: 10px;
+  margin-right: 5px;
+}
+
+.logo path {
+  fill: var(--neutral-light-4);
+}
