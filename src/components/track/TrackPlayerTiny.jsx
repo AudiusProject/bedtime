@@ -70,33 +70,35 @@ const TrackPlayerTiny = ({
   }
 
   return (
-    <div
-      className={styles.container}
-      onClick={onClick}
-      ref={containerRef}
-    >
-      <div className={styles.playContainer}>
-        <PlayButton
-          playingState={playingState}
-          onTogglePlay={onTogglePlay}
-          className={styles.playButton}
-        />
-      </div>
-      <div className={styles.infoContainer}>
-        <div
-          className={cn(styles.info, {
-            [styles.animating]: animating
-          })}
-          ref={infoRef}
-          style={infoStyle}
-        >
-          {info}
+    <div className={styles.wrapper}>
+      <PlayButton
+        playingState={playingState}
+        onTogglePlay={onTogglePlay}
+        className={styles.playButton}
+      />
+      <div
+        className={styles.container}
+        onClick={onClick}
+        ref={containerRef}
+      >
+        <div className={styles.playContainer}>
         </div>
-      </div>
-      <div className={styles.logoContainer}>
-        <AudiusLogoGlyph
-          className={styles.logo}
-        />
+        <div className={styles.infoContainer}>
+          <div
+            className={cn(styles.info, {
+              [styles.animating]: animating
+            })}
+            ref={infoRef}
+            style={infoStyle}
+          >
+            {info}
+          </div>
+        </div>
+        <div className={styles.logoContainer}>
+          <AudiusLogoGlyph
+            className={styles.logo}
+          />
+        </div>
       </div>
     </div>
   )

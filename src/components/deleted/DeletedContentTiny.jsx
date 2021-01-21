@@ -15,20 +15,22 @@ const DeletedContentTiny = ({
   onClick
 }) => {
   return (
-    <div
-      className={styles.container}
-      onClick={onClick}
-    >
+    <div className={styles.wrapper}>
       <PlayButton
         playingState={PlayingState.Stopped}
         className={styles.playButton}
       />
-      <div className={styles.info}>
-        {messages.deleted}
+      <div
+        className={styles.container}
+        onClick={onClick}
+      >
+        <div className={styles.info}>
+          {messages.deleted}
+        </div>
+        <AudiusLogoGlyph
+          className={styles.logo}
+        />
       </div>
-      <AudiusLogoGlyph
-        className={styles.logo}
-      />
     </div>
   )
 }

@@ -1,3 +1,8 @@
+.wrapper {
+  width: 100%;
+  position: relative;
+}
+
 .container {
   display: flex;
   align-items: center;
@@ -25,9 +30,21 @@
 }
 
 .playButton {
-  margin-left: 2px;
-  height: 16px;
-  width: 16px;
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  z-index: 2;
+  box-shadow: none;
+  padding: 1px;
+  box-sizing: border-box;
+}
+
+.playButton:hover {
+  transform: scale(1.1);
+}
+
+.playButton:active {
+  transform: scale(0.98);
 }
 
 .playButton path {
@@ -46,7 +63,7 @@
 .info {
   font-style: normal;
   font-weight: bold;
-  font-size: 11px;
+  font-size: 14px;
   line-height: 20px;
   vertical-align: bottom;
   height: 20px;
@@ -55,7 +72,7 @@
   letter-spacing: 0.01em;
   color: var(--neutral);
   white-space: nowrap;
-  margin-left: 26px;
+  margin-left: 24px;
 
   display: inline-block;
   width: var(--info-width);
@@ -71,7 +88,7 @@
   
   will-change: transform;
   animation: marquee 15s linear infinite;
-  animation-delay: 3s;
+  animation-delay: 1.5s;
 }
 
 .logoContainer {

@@ -25,7 +25,9 @@ const TrackPlayerContainer = ({
   const { popoverVisibility, setPopoverVisibility } = useContext(PauseContext)
 
   const onTrackEnd = useCallback(() => {
-    setPopoverVisibility(true)
+    if (flavor !== PlayerFlavor.TINY) {
+      setPopoverVisibility(true)
+    }
   }, [setPopoverVisibility])
 
   const {
