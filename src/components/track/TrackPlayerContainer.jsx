@@ -28,7 +28,7 @@ const TrackPlayerContainer = ({
     if (flavor !== PlayerFlavor.TINY) {
       setPopoverVisibility(true)
     }
-  }, [setPopoverVisibility])
+  }, [flavor, setPopoverVisibility])
 
   const {
     playingState,
