@@ -26,7 +26,11 @@
     <script type="text/javascript">
       const fetchBItems = async () => {
         const bItemsUrl = 'https://bitems.audius.co'
-        window.bItems = new Set((await (await fetch(bItemsUrl)).json()).i)
+        try {
+          window.bItems = new Set((await (await fetch(bItemsUrl)).json()).i)
+        } catch (e) {
+          window.bItems = new Set()
+        }
       }
       fetchBItems()
     </script>
