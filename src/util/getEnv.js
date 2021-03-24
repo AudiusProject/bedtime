@@ -17,7 +17,7 @@ const envHostnameMap = {
   [PROD_GA_HOSTNAME]: Environment.PRODUCTION,
   [STAGING_HOSTNAME]: Environment.STAGING,
   [STAGING_GA_HOSTNAME]: Environment.STAGING,
-  [LOCALHOST]: Environment.DEVELOPMENT
+  [LOCALHOST]: Environment.PRODUCTION
 }
 
 const getEnv = () => {
