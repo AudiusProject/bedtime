@@ -27,7 +27,7 @@ const CollectionPlayerContainer = ({
   // Helper fn to get segements
   const getSegments = useCallback((i) => collection.tracks[i].segments, [collection])
   const getId = useCallback((i) => collection.tracks[i].id, [collection])
-  const getGateways = useCallback((i) => formatGateways(collection.gateways))
+  const getGateways = useCallback((i) => formatGateways(collection.tracks[i].gateways))
 
   // callback for usePlayback
   const onTrackEnd = useCallback(({ stop, onTogglePlay, load }) => {
