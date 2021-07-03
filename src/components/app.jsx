@@ -132,7 +132,6 @@ const App = (props) => {
   // Request metadata from GA, computing
   // dominant color on success.
   const requestMetadata = useCallback(async (request) => {
-    console.log({request})
     onGoingRequest.current = true
 
     // Queue up the loading animation
