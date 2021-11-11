@@ -140,7 +140,7 @@ const CollectibleDetailsView = ({ collectible }) => (
           <Button
             className={styles.button}
             onClick={() => {
-              window.open(`${getAudiusURL()}/${handle}/collectibles/${getHash(collectible.id)}`, '_blank')
+              window.open(`${getAudiusUrl()}/${handle}/collectibles/${getHash(collectible.id)}`, '_blank')
             }}
             label="View on "
             icon={<AudiusLogo />}
