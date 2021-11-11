@@ -4,7 +4,7 @@ const Environment = Object.seal({
   DEVELOPMENT: 'DEVELOPMENT'
 })
 
-const PROD_HOSTNAME = "audius.co"
+const PROD_HOSTNAME = "ray.audius.co"
 const PROD_GA_HOSTNAME = "audius.co"
 const PROD_HOSTNAME_REDIRECT = "redirect.audius.co"
 const STAGING_HOSTNAME = "staging.audius.co"

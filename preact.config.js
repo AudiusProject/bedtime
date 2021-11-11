@@ -36,7 +36,7 @@ export default function(config, env, helpers) {
   if (env.production) {
     // In the production env, we serve the embed player at a path audius.co/embed.
     // Set prefix in the public path so assets can load properly
-    config.output.publicPath = "/embed/";
+    config.output.publicPath = "/";
   } else {
     // In the dev environment, we're just running at localhost:<port>, so we can
     // use absolute paths for the public assets
