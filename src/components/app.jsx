@@ -31,7 +31,14 @@ import { shadeColor } from '../util/shadeColor'
 import { isMobileWebTwitter } from '../util/isMobileWebTwitter'
 import { CardContextProvider } from './card/Card'
 import { isBItem } from '../util/bitems'
-import { ID_ROUTE, HASH_ID_ROUTE, COLLECTIBLES_ROUTE, COLLECTIBLE_ID_ROUTE } from '../routes'
+import {
+  ID_ROUTE,
+  HASH_ID_ROUTE,
+  COLLECTIBLES_ROUTE,
+  COLLECTIBLE_ID_ROUTE,
+  COLLECTIBLES_DISCORD_ROUTE,
+  COLLECTIBLE_ID_DISCORD_ROUTE
+} from '../routes'
 
 if ((module).hot) {
     // tslint:disable-next-line:no-var-requires
@@ -116,7 +123,8 @@ const getRequestDataFromURL = ({
         isTwitter
       }
     }
-    case COLLECTIBLES_ROUTE: {
+    case COLLECTIBLES_ROUTE:
+    case COLLECTIBLES_DISCORD_ROUTE: {
       const { handle, isTwitter } = matches
       return {
         requestType,
@@ -125,7 +133,8 @@ const getRequestDataFromURL = ({
         isTwitter
       }
     }
-    case COLLECTIBLE_ID_ROUTE: {
+    case COLLECTIBLE_ID_ROUTE:
+    case COLLECTIBLE_ID_DISCORD_ROUTE: {
       const { handle, collectibleId, isTwitter } = matches
       return {
         requestType,
