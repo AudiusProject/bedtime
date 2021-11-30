@@ -10,6 +10,7 @@ import {
   GetTracksResponse,
   getTrackWithHashId
 } from '../util/BedtimeClient'
+import { initTrackSessionStart } from '../util/analytics'
 import CollectiblesPlayerContainer from './collectibles/CollectiblesPlayerContainer'
 import CollectionPlayerContainer from './collection/CollectionPlayerContainer'
 import TrackPlayerContainer from './track/TrackPlayerContainer'
@@ -168,6 +169,11 @@ const App = (props) => {
       recordError()
     }
   }, [didError])
+
+  // Record this session with analytics
+  useEffect(() => {
+    initTrackSessionStart()
+  }, [])
 
   // TODO: pull these out into separate functions?
   // Request metadata from GA, computing
