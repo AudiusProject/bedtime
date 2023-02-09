@@ -13,6 +13,6 @@ npm run start:dev
 # Run against stage audius services
 npm run start:stage
 
-# Run against prod audius services
+# Run against production Audius services
 npm run start:prod
 ```
