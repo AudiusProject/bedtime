@@ -7,7 +7,7 @@ Like you've seen on [twitter](https://twitter.com/AudiusProject/status/129362480
 
 ## Running
 ```
-# Run against a local general admission server
+# Run against a local [General Admission](https://github.com/AudiusProject/general-admission) server
 npm run start:dev
 
 # Run against staging Audius services
