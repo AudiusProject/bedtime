@@ -10,7 +10,7 @@ Like you've seen on [twitter](https://twitter.com/AudiusProject/status/129362480
 # Run against a local general admission server
 npm run start:dev
 
-# Run against stage audius services
+# Run against staging Audius services
 npm run start:stage
 
 # Run against production Audius services
