@@ -6,7 +6,6 @@ import {
   getCollection,
   getCollectionWithHashId,
   getTrack,
-  getTrackStreamEndpointBuilder,
   getTrackWithHashId
 } from '../util/BedtimeClient'
 import CollectiblesPlayerContainer from './collectibles/CollectiblesPlayerContainer'
@@ -164,10 +163,6 @@ const App = (props) => {
 
   const [tracksResponse, setTracksResponse] = useState(null)
   const [collectionsResponse, setCollectionsResponse] = useState(null)
-
-  /** `undefined` means we need to fetch the endpoint. `null` means we tried and failed to fetch the endpoint: */
-  const [getTrackStreamEndpoint, setGetTrackStreamEndpoint] =
-    useState(undefined)
   const [collectiblesResponse, setCollectiblesResponse] = useState(null)
   const [showLoadingAnimation, setShowLoadingAnimation] = useState(false)
   const onGoingRequest = useRef(false)
@@ -200,28 +195,12 @@ const App = (props) => {
     try {
       const { requestType } = request
       if (requestType === RequestType.TRACK) {
-        let trackRequest
+        let track
         if (request.hashId) {
-          trackRequest = getTrackWithHashId(request.hashId)
+          track = await getTrackWithHashId(request.hashId)
         } else {
-          trackRequest = getTrack(request.id)
+          track = await getTrack(request.id)
         }
-
-        const [trackRequestResult, trackStreamEndpointResult] =
-          await Promise.allSettled([
-            trackRequest,
-            getTrackStreamEndpointBuilder()
-          ])
-        if (trackRequestResult.status === 'rejected') {
-          throw new Error(trackRequestResult.reason)
-        }
-
-        setGetTrackStreamEndpoint(
-          trackStreamEndpointResult.status === 'rejected'
-            ? null
-            : () => trackStreamEndpointResult.value
-        )
-        const track = trackRequestResult.value
 
         if (!track) {
           setDid404(true)
@@ -256,27 +235,12 @@ const App = (props) => {
           setDominantColor({ primary: color })
         }
       } else if (requestType === RequestType.COLLECTION) {
-        let collectionRequest
+        let collection
         if (request.hashId) {
-          collectionRequest = getCollectionWithHashId(request.hashId)
+          collection = await getCollectionWithHashId(request.hashId)
         } else {
-          collectionRequest = getCollection(request.id)
+          collection = await getCollection(request.id)
         }
-        const [collectionRequestResult, trackStreamEndpointResult] =
-          await Promise.allSettled([
-            collectionRequest,
-            getTrackStreamEndpointBuilder()
-          ])
-        if (collectionRequestResult.status === 'rejected') {
-          throw new Error(collectionRequestResult.reason)
-        }
-        setGetTrackStreamEndpoint(
-          trackStreamEndpointResult.status === 'rejected'
-            ? null
-            : () => trackStreamEndpointResult.value
-        )
-
-        const collection = collectionRequestResult.value
 
         if (!collection) {
           setDid404(true)
@@ -428,11 +392,6 @@ const App = (props) => {
         >
           {!tracksResponse ? null : (
             <TrackPlayerContainer
-              trackStreamEndpoint={
-                getTrackStreamEndpoint
-                  ? getTrackStreamEndpoint(tracksResponse.id)
-                  : undefined
-              }
               track={tracksResponse}
               flavor={requestState.playerFlavor}
               isTwitter={requestState.isTwitter}
@@ -441,7 +400,6 @@ const App = (props) => {
           )}
           {!collectionsResponse ? null : (
             <CollectionPlayerContainer
-              getTrackStreamEndpoint={getTrackStreamEndpoint}
               collection={collectionsResponse}
               flavor={requestState.playerFlavor}
               isTwitter={requestState.isTwitter}

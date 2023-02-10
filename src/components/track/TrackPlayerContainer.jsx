@@ -21,6 +21,7 @@ import { PlayingState } from '../playbutton/PlayButton'
 import { isMobile } from '../../util/isMobile'
 import { formatGateways } from '../../util/gatewayUtil'
 import { logError } from '../../util/logError'
+import { getTrackStreamEndpoint } from '../../util/BedtimeClient'
 
 const LISTEN_INTERVAL_SECONDS = 1
 
@@ -29,8 +30,7 @@ const TrackPlayerContainer = ({
   track,
   isTwitter,
   backgroundColor,
-  did404,
-  trackStreamEndpoint
+  did404
 }) => {
   const [didInitAudio, setDidInitAudio] = useState(false)
   const { popoverVisibility, setPopoverVisibility } = useContext(PauseContext)
@@ -59,15 +59,14 @@ const TrackPlayerContainer = ({
       gateways: formatGateways(track.user.creator_node_endpoint),
       title: track.title,
       artistName: track.user.name,
-      mp3StreamUrl: trackStreamEndpoint
+      mp3StreamUrl: getTrackStreamEndpoint(track.id)
     }
   }, [
     track.id,
     track.title,
     track.track_segments,
     track.user.creator_node_endpoint,
-    track.user.name,
-    trackStreamEndpoint
+    track.user.name
   ])
 
   const didTogglePlay = useCallback(() => {

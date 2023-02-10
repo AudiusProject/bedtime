@@ -13,8 +13,17 @@ export const RequestedEntity = Object.seal({
   COLLECTIONS: 'collections',
   COLLECTIBLES: 'collectibles'
 })
-
-const audiusSdk = sdk({ appName: 'Audius Embed Player' })
+let discoveryEndpoint
+const audiusSdk = sdk({
+  appName: 'Audius Embed Player',
+  discoveryProviderConfig: {
+    selectionCallback: (endpoint) => {
+      discoveryEndpoint = endpoint
+    }
+  }
+})
+export const getTrackStreamEndpoint = (trackId) =>
+  `${discoveryEndpoint}/v1/tracks/${trackId}/stream`
 
 export const uuid = () => {
   // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript/873856#873856
@@ -130,19 +139,4 @@ export const getCollectible = async (handle, collectibleId) => {
 export const getCollectibles = async (handle) => {
   const url = constructCollectiblesEndpoint(handle)
   return makeRequest(url)
-}
-
-const DUMMY_TRACK_ID = 'dummy3729oreo'
-
-/** Hacky but this helps us avoid making repeated calls to `streamTrack`, which in turn chooses a healthy discovery node endpoint. This way,
- * we can just pick our discovery node endpoint once and derive the track stream URLs from that.
- *
- * Returns function ((trackId) => string) for getting a track streaming URL
- * */
-export const getTrackStreamEndpointBuilder = async () => {
-  const result = await audiusSdk.tracks.streamTrack({ trackId: DUMMY_TRACK_ID })
-  const getTrackStreamEndpoint = (trackHashId) => {
-    return result.replace(DUMMY_TRACK_ID, trackHashId)
-  }
-  return getTrackStreamEndpoint
 }

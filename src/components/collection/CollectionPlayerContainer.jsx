@@ -17,6 +17,7 @@ import { isMobile } from '../../util/isMobile'
 import { PlayerFlavor } from '../app'
 import { formatGateways } from '../../util/gatewayUtil'
 import CollectionHelmet from './CollectionHelmet'
+import { getTrackStreamEndpoint } from '../../util/BedtimeClient'
 
 const LISTEN_INTERVAL_SECONDS = 1
 
@@ -25,8 +26,7 @@ const CollectionPlayerContainer = ({
   collection,
   isTwitter,
   backgroundColor,
-  rowBackgroundColor,
-  getTrackStreamEndpoint
+  rowBackgroundColor
 }) => {
   const [activeTrackIndex, setActiveTrackIndex] = useState(0)
   const [didInitAudio, setDidInitAudio] = useState(false)
@@ -94,9 +94,7 @@ const CollectionPlayerContainer = ({
     if (activeTrack == null) {
       return null
     }
-    const mp3StreamUrl = getTrackStreamEndpoint
-      ? getTrackStreamEndpoint(activeTrack.id)
-      : undefined
+    const mp3StreamUrl = getTrackStreamEndpoint(activeTrack.id)
 
     return {
       segments: activeTrack.track_segments,
@@ -105,7 +103,7 @@ const CollectionPlayerContainer = ({
       artistName: activeTrack.user.name,
       mp3StreamUrl
     }
-  }, [activeTrackIndex, collection.tracks, getTrackStreamEndpoint])
+  }, [activeTrackIndex, collection.tracks])
 
   // Setup twitter autoplay
   useEffect(() => {
