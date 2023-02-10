@@ -262,14 +262,15 @@ const App = (props) => {
         } else {
           collectionRequest = getCollection(request.id)
         }
-        const [collectionRequestResult, trackStreamEndpointResult] =
-          await Promise.allSettled([
-            collectionRequest,
-            getTrackStreamEndpointBuilder()
-          ])
+        const [collectionRequestResult] = await Promise.allSettled([
+          collectionRequest
+        ])
         if (collectionRequestResult.status === 'rejected') {
           throw new Error(collectionRequestResult.reason)
         }
+        const [trackStreamEndpointResult] = await Promise.allSettled([
+          getTrackStreamEndpointBuilder()
+        ])
         setGetTrackStreamEndpoint(
           trackStreamEndpointResult.status === 'rejected'
             ? null

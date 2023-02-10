@@ -14,6 +14,10 @@ export const getCreatorNodeWhitelist = () => {
   return process.env.PREACT_APP_CREATOR_NODE_WHITELIST
 }
 
+export const getDiscoveryNodeWhitelist = () => {
+  return process.env.PREACT_APP_DISCOVERY_NODE_WHITELIST || undefined
+}
+
 // Need some way to run against GA locally
 export const getAPIHostname = () => {
   const localGAPort = process.env.PREACT_APP_LOCAL_GA_PORT
