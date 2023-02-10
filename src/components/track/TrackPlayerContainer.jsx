@@ -1,5 +1,11 @@
 import { h } from 'preact'
-import { useState, useContext, useCallback, useEffect } from 'preact/hooks'
+import {
+  useState,
+  useContext,
+  useCallback,
+  useEffect,
+  useMemo
+} from 'preact/hooks'
 
 import { PlayerFlavor } from '../app'
 import TrackPlayerCompact from './TrackPlayerCompact'
@@ -23,7 +29,8 @@ const TrackPlayerContainer = ({
   track,
   isTwitter,
   backgroundColor,
-  did404
+  did404,
+  trackStreamEndpoint
 }) => {
   const [didInitAudio, setDidInitAudio] = useState(false)
   const { popoverVisibility, setPopoverVisibility } = useContext(PauseContext)
@@ -46,13 +53,27 @@ const TrackPlayerContainer = ({
     stop
   } = usePlayback(track.id, onTrackEnd)
 
+  const trackInfoForPlayback = useMemo(() => {
+    return {
+      segments: track.track_segments,
+      gateways: formatGateways(track.user.creator_node_endpoint),
+      title: track.title,
+      artistName: track.user.name,
+      mp3StreamUrl: trackStreamEndpoint
+    }
+  }, [
+    track.id,
+    track.title,
+    track.track_segments,
+    track.user.creator_node_endpoint,
+    track.user.name,
+    trackStreamEndpoint
+  ])
+
   const didTogglePlay = useCallback(() => {
     if (!didInitAudio) {
       initAudio()
-      loadTrack(
-        track.track_segments,
-        formatGateways(track.user.creator_node_endpoint)
-      )
+      loadTrack(trackInfoForPlayback)
       setDidInitAudio(true)
     }
     onTogglePlay()
@@ -68,9 +89,8 @@ const TrackPlayerContainer = ({
     flavor,
     initAudio,
     loadTrack,
-    track.track_segments,
-    track.user.creator_node_endpoint,
-    setPopoverVisibility
+    setPopoverVisibility,
+    trackInfoForPlayback
   ])
 
   const playbarEnabled =
@@ -83,14 +103,12 @@ const TrackPlayerContainer = ({
     const mobile = isMobile()
     if (!isTwitter || mobile) return
     initAudio()
-    loadTrack(
-      track.track_segments,
-      formatGateways(track.user.creator_node_endpoint)
-    )
+    loadTrack(trackInfoForPlayback)
     setDidInitAudio(true)
     onTogglePlay()
+    // TODO: Fix these deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [trackInfoForPlayback])
 
   useEffect(() => {
     const handleMessage = (e) => {
