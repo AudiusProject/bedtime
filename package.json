@@ -40,7 +40,7 @@
     "identity-obj-proxy": "3.0.0",
     "jest": "29.4.2",
     "per-env": "1.0.2",
-    "preact-cli": "3.0.0-rc.7",
+    "preact-cli": "3.4.5",
     "preact-cli-plugin-env-vars": "1.2.1",
     "preact-cli-svg-loader": "1.0.0",
     "preact-render-spy": "1.2.1",
