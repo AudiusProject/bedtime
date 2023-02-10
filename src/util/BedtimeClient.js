@@ -1,8 +1,4 @@
-import {
-  getIdentityEndpoint,
-  getAPIHostname,
-  getDiscoveryNodeWhitelist
-} from './getEnv'
+import { getIdentityEndpoint, getAPIHostname } from './getEnv'
 import { sdk } from '@audius/sdk'
 
 import { recordListen as recordAnalyticsListen } from '../analytics/analytics'
