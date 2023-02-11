@@ -241,8 +241,6 @@ const App = (props) => {
         } else {
           collection = await getCollection(request.id)
         }
-        console.log('do collection')
-        console.log({collection})
 
         if (!collection) {
           setDid404(true)

@@ -41,9 +41,7 @@ export const RequestedEntity = Object.seal({
 })
 let discoveryEndpoint
 const discoveryNodeSelector = new DiscoveryNodeSelector()
-console.log(discoveryNodeSelector)
 discoveryNodeSelector.addEventListener('change', endpoint => {
-  console.log('got endpoint', endpoint)
   discoveryEndpoint = endpoint
 })
 const audiusSdk = sdk({
