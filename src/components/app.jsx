@@ -241,6 +241,8 @@ const App = (props) => {
         } else {
           collection = await getCollection(request.id)
         }
+        console.log('do collection')
+        console.log({collection})
 
         if (!collection) {
           setDid404(true)
@@ -250,7 +252,7 @@ const App = (props) => {
           setCollectionsResponse(collection)
           recordOpen(
             decodeHashId(collection.id),
-            collection.playlist_name,
+            collection.playlistName,
             collection.user.handle,
             stripLeadingSlash(collection.permalink)
           )
