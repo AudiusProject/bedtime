@@ -1,5 +1,10 @@
 import { getIdentityEndpoint, getAPIHostname } from './getEnv'
-import { sdk, DiscoveryNodeSelector } from '@audius/sdk'
+import {
+  sdk,
+  DiscoveryNodeSelector,
+  stagingConfig,
+  developmentConfig
+} from '@audius/sdk'
 
 import { recordListen as recordAnalyticsListen } from '../analytics/analytics'
 import { encodeHashId, decodeHashId } from './hashids'
@@ -34,13 +39,30 @@ const sdkConfigOptions =
       }
     : {}
 
+let discoveryNodeSelectorConfig
+if (process.env.PREACT_APP_ENVIRONMENT === 'development') {
+  discoveryNodeSelectorConfig = {
+    healthCheckThresholds: { minVersion: developmentConfig.minVersion },
+    bootstrapServices: developmentConfig.discoveryNodes
+  }
+} else if (process.env.PREACT_APP_ENVIRONMENT === 'staging') {
+  discoveryNodeSelectorConfig = {
+    healthCheckThresholds: { minVersion: stagingConfig.minVersion },
+    bootstrapServices: stagingConfig.discoveryNodes
+  }
+} else {
+  discoveryNodeSelectorConfig = {} // defaults
+}
+
 export const RequestedEntity = Object.seal({
   TRACKS: 'tracks',
   COLLECTIONS: 'collections',
   COLLECTIBLES: 'collectibles'
 })
 let discoveryEndpoint
-const discoveryNodeSelector = new DiscoveryNodeSelector()
+const discoveryNodeSelector = new DiscoveryNodeSelector(
+  discoveryNodeSelectorConfig
+)
 discoveryNodeSelector.addEventListener('change', (endpoint) => {
   discoveryEndpoint = endpoint
 })
