@@ -3,7 +3,8 @@ import {
   sdk,
   DiscoveryNodeSelector,
   stagingConfig,
-  developmentConfig
+  developmentConfig,
+  productionConfig
 } from '@audius/sdk'
 
 import { recordListen as recordAnalyticsListen } from '../analytics/analytics'
@@ -13,46 +14,13 @@ import { logError } from './logError'
 const HOSTNAME = getAPIHostname()
 const IDENTITY_SERVICE_ENDPOINT = getIdentityEndpoint()
 
+const env = process.env.PREACT_APP_ENVIRONMENT
 const sdkConfigOptions =
-  process.env.PREACT_APP_ENVIRONMENT === 'staging' ||
-  process.env.PREACT_APP_ENVIRONMENT === 'development'
-    ? {
-        ethContractsConfig: {
-          tokenContractAddress: process.env.PREACT_APP_ETH_TOKEN_ADDRESS ?? '',
-          registryAddress: process.env.PREACT_APP_ETH_REGISTRY_ADDRESS ?? '',
-          claimDistributionContractAddress:
-            process.env.PREACT_APP_CLAIM_DISTRIBUTION_CONTRACT_ADDRESS ?? '',
-          wormholeContractAddress: process.env.PREACT_APP_WORMHOLE_ADDRESS ?? ''
-        },
-        ethWeb3Config: {
-          tokenAddress: process.env.PREACT_APP_ETH_TOKEN_ADDRESS ?? '',
-          registryAddress: process.env.PREACT_APP_ETH_REGISTRY_ADDRESS ?? '',
-          providers: (process.env.PREACT_APP_ETH_PROVIDER_URL || '').split(','),
-          ownerWallet: process.env.PREACT_APP_ETH_OWNER_WALLET,
-          claimDistributionContractAddress:
-            process.env.PREACT_APP_CLAIM_DISTRIBUTION_CONTRACT_ADDRESS ?? '',
-          wormholeContractAddress: process.env.PREACT_APP_WORMHOLE_ADDRESS ?? ''
-        },
-        identityServiceConfig: {
-          identityServiceEndpoint: IDENTITY_SERVICE_ENDPOINT
-        }
-      }
-    : {}
-
-let discoveryNodeSelectorConfig
-if (process.env.PREACT_APP_ENVIRONMENT === 'development') {
-  discoveryNodeSelectorConfig = {
-    healthCheckThresholds: { minVersion: developmentConfig.minVersion },
-    bootstrapServices: developmentConfig.discoveryNodes
-  }
-} else if (process.env.PREACT_APP_ENVIRONMENT === 'staging') {
-  discoveryNodeSelectorConfig = {
-    healthCheckThresholds: { minVersion: stagingConfig.minVersion },
-    bootstrapServices: stagingConfig.discoveryNodes
-  }
-} else {
-  discoveryNodeSelectorConfig = {} // defaults
-}
+  env === 'development'
+    ? developmentConfig
+    : env === 'staging'
+    ? stagingConfig
+    : productionConfig
 
 export const RequestedEntity = Object.seal({
   TRACKS: 'tracks',
@@ -60,9 +28,12 @@ export const RequestedEntity = Object.seal({
   COLLECTIBLES: 'collectibles'
 })
 let discoveryEndpoint
-const discoveryNodeSelector = new DiscoveryNodeSelector(
-  discoveryNodeSelectorConfig
-)
+const discoveryNodeSelector = new DiscoveryNodeSelector({
+  healthCheckThresholds: {
+    minVersion: sdkConfigOptions.minVersion
+  },
+  bootstrapServices: sdkConfigOptions.discoveryNodes
+})
 discoveryNodeSelector.addEventListener('change', (endpoint) => {
   discoveryEndpoint = endpoint
 })
