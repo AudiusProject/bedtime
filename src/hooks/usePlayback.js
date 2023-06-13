@@ -80,7 +80,6 @@ const usePlayback = (id, onAfterAudioEnd) => {
       if (!audioRef.current) {
         throw new Error('Init not called')
       }
-      console.log('load')
       audioRef.current.load(0, onAudioEnd, mp3StreamUrl)
       const newTiming = {
         position: 0,
@@ -162,7 +161,6 @@ const usePlayback = (id, onAfterAudioEnd) => {
 
   const onTogglePlay = useCallback(
     (idOverride) => {
-      console.log('on toggle play')
       switch (playingStateRef.current) {
         case PlayingState.Stopped:
           setPlayingStateRef(PlayingState.Playing)
