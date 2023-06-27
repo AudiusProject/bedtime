@@ -1,3 +1,7 @@
+# 🚚 We've moved! Find the Audius Embed Player over in the audius-client monorepo
+
+https://github.com/AudiusProject/audius-client/tree/main/packages/embed(https://github.com/AudiusProject/audius-client/tree/main/packages/embed)
+
 # Bedtime
 
 The Audius Embed Player
